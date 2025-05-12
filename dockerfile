@@ -9,18 +9,18 @@ RUN apt-get update && \
 # Install a basic SSH server
     apt-get install -qy openssh-server && \
     sed -i 's|session    required     pam_loginuid.so|session    optional  pam_loginuid.so|g' /etc/pam.d/sshd && \
-    mkdir -p /var/run/sshd && \
+    mkdir -p /var/run/sshd
 # Install JDK 8 (latest stable edition at 2019-04-01)
-    apt-get install -qy openjdk-21-jdk && \
+RUN    apt-get install -qy openjdk-21-jdk
 # Install maven (disabled)
     # apt-get install -qy maven && \
 # Cleanup old packages
-    apt-get -qy autoremove && \
+RUN    apt-get -qy autoremove
 # Add user jenkins to the image
-    adduser --quiet jenkins && \
+RUN    adduser --quiet jenkins
 # set the password for the jenkins user using the ARG variable
 # Set password for the jenkins user (you may want to alter this).
-    echo "jenkins:jenkins" | chpasswd
+RUN    echo "jenkins:jenkins" | chpasswd
     # echo "jenkins:$JENKINS_PASSWORD" | chpasswd
 
 # Copy authorized keys
