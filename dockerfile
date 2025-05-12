@@ -16,8 +16,10 @@ RUN apt-get install -qy openjdk-21-jdk
     # apt-get install -qy maven && \
 # Cleanup old packages
 RUN apt-get -qy autoremove
+# Add jenkins group
+RUN groupadd -g 2000 jenkins
 # Add user jenkins to the image
-RUN adduser --quiet jenkins
+RUN useradd -u 2000 -g jenkins -m -d /home/jenkins -s /bin/bash jenkins
 # set the password for the jenkins user using the ARG variable
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
