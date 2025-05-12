@@ -3,17 +3,21 @@ FROM ubuntu:25.04
 ARG JENKINS_PASSWORD=jenkins
 
 # Make sure the package repository is up to date.
-RUN apt-get update
-RUN apt-get -qy full-upgrade
-RUN apt-get install -qy git
+RUN apt update
+RUN apt -qy full-upgrade
+RUN apt install -qy git
 # Install a basic SSH server
-RUN apt-get install -qy openssh-server
+RUN apt install -qy openssh-server
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional  pam_loginuid.so|g' /etc/pam.d/sshd
 RUN mkdir -p /var/run/sshd
 # Install JDK 21 (latest stable edition at 2019-04-01)
-RUN apt-get install -qy openjdk-21-jdk
+RUN apt install -qy openjdk-21-jdk
 # Install maven (disabled)
     # apt-get install -qy maven && \
+#install ansible
+RUN apt install -qy software-properties-common
+RUN add-apt-repository --yes --update ppa:ansible/ansible
+RUN apt install -qy ansible
 # Cleanup old packages
 RUN apt-get -qy autoremove
 # Add jenkins group
