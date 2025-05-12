@@ -4,6 +4,7 @@ pipeline {
 
     dockerBuildImage = ''
     IMAGE_NAME = 'botirkhuja/jenkins-docker-agent'
+    JENKINS_AGENT_UBUNTU = credentials('jenkins-agent-ubuntu-password')
   }
   agent {
     node {
@@ -21,7 +22,7 @@ pipeline {
         script {
           // Build Docker image from Dockerfile
           // sh "docker build -f Dockerfile -t ${IMAGE_NAME} ."
-          dockerBuildImage = docker.build(IMAGE_NAME)
+          dockerBuildImage = docker.build(IMAGE_NAME, "--build-arg JENKINS_PASSWORD=${JENKINS_AGENT_UBUNTU_PSW} .")
         }
       }
     }

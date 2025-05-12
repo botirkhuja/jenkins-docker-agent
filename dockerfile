@@ -22,8 +22,8 @@ RUN groupadd -g 2000 jenkins
 RUN useradd -u 2000 -g jenkins -m -d /home/jenkins -s /bin/bash jenkins
 # set the password for the jenkins user using the ARG variable
 # Set password for the jenkins user (you may want to alter this).
-RUN echo "jenkins:jenkins" | chpasswd
-    # echo "jenkins:$JENKINS_PASSWORD" | chpasswd
+RUN echo "jenkins:$JENKINS_PASSWORD" | chpasswd
+    # echo "jenkins:jenkins" | chpasswd
 
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
