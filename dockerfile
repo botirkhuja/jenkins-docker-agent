@@ -1,26 +1,26 @@
-FROM ubuntu:24.10
+FROM ubuntu:25.04
 
 ARG JENKINS_PASSWORD=jenkins
 
 # Make sure the package repository is up to date.
-RUN apt-get update && \
-    apt-get -qy full-upgrade && \
-    apt-get install -qy git && \
+RUN apt-get update
+RUN apt-get -qy full-upgrade
+RUN apt-get install -qy git
 # Install a basic SSH server
-    apt-get install -qy openssh-server && \
-    sed -i 's|session    required     pam_loginuid.so|session    optional  pam_loginuid.so|g' /etc/pam.d/sshd && \
-    mkdir -p /var/run/sshd
-# Install JDK 8 (latest stable edition at 2019-04-01)
-RUN    apt-get install -qy openjdk-21-jdk
+RUN apt-get install -qy openssh-server
+RUN sed -i 's|session    required     pam_loginuid.so|session    optional  pam_loginuid.so|g' /etc/pam.d/sshd
+RUN mkdir -p /var/run/sshd
+# Install JDK 21 (latest stable edition at 2019-04-01)
+RUN apt-get install -qy openjdk-21-jdk
 # Install maven (disabled)
     # apt-get install -qy maven && \
 # Cleanup old packages
-RUN    apt-get -qy autoremove
+RUN apt-get -qy autoremove
 # Add user jenkins to the image
-RUN    adduser --quiet jenkins
+RUN adduser --quiet jenkins
 # set the password for the jenkins user using the ARG variable
 # Set password for the jenkins user (you may want to alter this).
-RUN    echo "jenkins:jenkins" | chpasswd
+RUN echo "jenkins:jenkins" | chpasswd
     # echo "jenkins:$JENKINS_PASSWORD" | chpasswd
 
 # Copy authorized keys
