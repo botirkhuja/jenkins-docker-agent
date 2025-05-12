@@ -5,7 +5,11 @@ pipeline {
     dockerBuildImage = ''
     IMAGE_NAME = 'botirkhuja/jenkins-docker-agent'
   }
-  agent any
+  agent {
+    node {
+      label 'jenkins_vm'
+    }
+  }
   stages {
     stage('List items') {
       steps {
