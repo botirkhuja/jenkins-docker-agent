@@ -20,7 +20,8 @@ RUN apt-get update && \
     adduser --quiet jenkins && \
 # set the password for the jenkins user using the ARG variable
 # Set password for the jenkins user (you may want to alter this).
-    echo "jenkins:$JENKINS_PASSWORD" | chpasswd
+    echo "jenkins:jenkins" | chpasswd
+    # echo "jenkins:$JENKINS_PASSWORD" | chpasswd
 
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
