@@ -18,6 +18,8 @@ RUN apt install -qy openjdk-21-jdk
 RUN apt install -qy software-properties-common
 RUN add-apt-repository --yes --update ppa:ansible/ansible
 RUN apt install -qy ansible
+# Install rsync
+RUN apt install -qy rsync
 # Cleanup old packages
 RUN apt-get -qy autoremove
 # Add jenkins group
