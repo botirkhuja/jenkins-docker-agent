@@ -3,40 +3,64 @@ pipeline {
     registryCredential = 'docker-botirkhuja-password'
 
     dockerBuildImage = ''
+    dockerFileName = ''
     IMAGE_NAME = 'botirkhuja/jenkins-docker-agent'
     JENKINS_AGENT_UBUNTU = credentials('jenkins-agent-ubuntu-password')
   }
+
+  parameters {
+    choice(name: 'DOCKERFILE', choices: ['ANSIBLE', 'NODE'], description: '')
+  }
+  
   agent {
     node {
       label 'jenkins_vm'
     }
   }
+
   stages {
     stage('List items') {
       steps {
         sh 'ls'
       }
     }
+
+    stage('update dockerfile') {
+      steps {
+        script {
+          if (params.DOCKERFILE == 'ANSIBLE') {
+            dockerFileName = 'Dockerfile.ansible'
+          } else if (params.DOCKERFILE == 'NODE') {
+            dockerFileName = 'Dockerfile.node'
+          }
+          sh "cp ${dockerFileName} Dockerfile"
+        }
+      }
+    }
+
     stage('Build Docker Image') {
       steps {
         script {
           // Build Docker image from Dockerfile
           // sh "docker build -f Dockerfile -t ${IMAGE_NAME} ."
-          dockerBuildImage = docker.build(IMAGE_NAME, "--build-arg JENKINS_PASSWORD=${JENKINS_AGENT_UBUNTU_PSW} .")
+          dockerBuildImage = docker.build(
+            IMAGE_NAME,
+            "--build-arg JENKINS_PASSWORD=${JENKINS_AGENT_UBUNTU_PSW} ."
+          )
         }
       }
     }
 
-    stage('Push Image to Docker Registry') {
-      steps {
-        script {
-          docker.withRegistry('', registryCredential) {
-            dockerBuildImage.push("$BUILD_NUMBER")
-            dockerBuildImage.push('latest')
-          }
-        }
-      }
-    }
+    // stage('Push Image to Docker Registry') {
+    //   steps {
+    //     script {
+    //       docker.withRegistry('', registryCredential) {
+    //         dockerBuildImage.push("$BUILD_NUMBER")
+    //         dockerBuildImage.push('latest')
+    //       }
+    //     }
+    //   }
+    // }
 
     stage('Delete pushed image') {
       steps {
