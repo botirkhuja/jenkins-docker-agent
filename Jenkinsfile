@@ -51,21 +51,21 @@ pipeline {
       }
     }
 
-    // stage('Push Image to Docker Registry') {
-    //   steps {
-    //     script {
-    //       docker.withRegistry('', registryCredential) {
-    //         dockerBuildImage.push("$BUILD_NUMBER")
-    //         dockerBuildImage.push('latest')
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Push Image to Docker Registry') {
+      steps {
+        script {
+          docker.withRegistry('', registryCredential) {
+            dockerBuildImage.push("$BUILD_NUMBER-$DOCKERFILE")
+            dockerBuildImage.push('latest')
+          }
+        }
+      }
+    }
 
     stage('Delete pushed image') {
       steps {
         script {
-          sh "docker rmi ${IMAGE_NAME}:${BUILD_NUMBER}"
+          sh "docker rmi ${IMAGE_NAME}:${BUILD_NUMBER}-$DOCKERFILE"
           sh "docker rmi ${IMAGE_NAME}:latest"
         }
       }

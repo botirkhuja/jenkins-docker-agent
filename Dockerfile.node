@@ -2,6 +2,9 @@ FROM ubuntu:25.04
 
 ARG JENKINS_PASSWORD=jenkins
 
+# print environment variables
+RUN echo printenv
+
 # Make sure the package repository is up to date.
 RUN apt update
 RUN apt -qy full-upgrade
@@ -26,8 +29,6 @@ RUN useradd -u 2000 -g jenkins -m -d /home/jenkins -s /bin/bash jenkins
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:$JENKINS_PASSWORD" | chpasswd
     # echo "jenkins:jenkins" | chpasswd
-
-RUN echo "echoing docker file name $DOCKERFILE"
 
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
