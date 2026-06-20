@@ -4,8 +4,6 @@ FROM jenkins/ssh-agent:debian-jdk21 as ssh-agent
 RUN apt update
 RUN apt -qy full-upgrade
 
-RUN pipx install --include-deps ansible
-
 RUN apt-get -qy autoremove
 
 COPY --chown=jenkins mykey "${JENKINS_AGENT_HOME}"/.ssh/mykey
